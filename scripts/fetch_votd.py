@@ -21,6 +21,13 @@ if not APP_KEY:
 
 HEADERS = {"X-YVP-App-Key": APP_KEY}
 
+# The King James Version's Bible ID on the YouVersion Platform. Confirmed
+# directly via the Bible directory at platform.youversion.com/bibles
+# (publisher: public domain / "Unknown" -- not gated behind any of the
+# publisher license agreements), so this can be used directly without
+# needing a separate lookup call.
+KJV_BIBLE_ID = 1
+
 
 def api_get(url):
     req = urllib.request.Request(url, headers=HEADERS)
@@ -34,21 +41,6 @@ def api_get(url):
         raise
 
 
-def find_kjv_bible_id():
-    # A plain, concrete page_size (max allowed is 99) rather than the
-    # "return everything" special value -- keeps this call simple and
-    # avoids relying on edge-case query-param behavior. KJV is extremely
-    # likely to appear well within the first 99 English Bible versions.
-    url = "https://api.youversion.com/v1/bibles?language_ranges%5B%5D=en&page_size=99"
-    bibles = api_get(url)
-    for b in bibles.get("data", []):
-        title = (b.get("title") or "").lower()
-        abbr = (b.get("abbreviation") or "").lower()
-        if "king james" in title or abbr == "kjv":
-            return b["id"]
-    raise RuntimeError("Could not find the King James Version in the first 99 English Bible versions.")
-
-
 def main():
     now = datetime.datetime.now(datetime.timezone.utc)
     day_of_year = now.timetuple().tm_yday
@@ -56,10 +48,8 @@ def main():
     votd = api_get(f"https://api.youversion.com/v1/verse_of_the_days/{day_of_year}")
     passage_id = votd["passage_id"]
 
-    bible_id = find_kjv_bible_id()
-
     passage = api_get(
-        f"https://api.youversion.com/v1/bibles/{bible_id}/passages/{passage_id}?format=text"
+        f"https://api.youversion.com/v1/bibles/{KJV_BIBLE_ID}/passages/{passage_id}?format=text"
     )
 
     result = {
