@@ -1356,11 +1356,12 @@ playBtn.addEventListener('click', () => {
 
   async function refresh(){
     try{
-      const res = await fetch('https://public.radio.co/api/v2/s052a4bca4/track/current');
+      const res = await fetch('https://public.radio.co/stations/s052a4bca4/status');
       if(!res.ok) throw new Error('now-playing request failed');
       const data = await res.json();
-      const title = data.title || data.track_title || data.song_title || data.name || 'The Verse FM';
-      const artwork = data.artwork_url || data.artwork || data.image || data.artwork_url_large;
+      const track = data.current_track || {};
+      const title = track.title || 'The Verse FM';
+      const artwork = track.artwork_url_large || track.artwork_url || data.logo_url;
 
       if(trackLabel) trackLabel.textContent = 'Live · ' + title;
       if(nowTrack) nowTrack.textContent = title;
