@@ -1084,8 +1084,6 @@ document.querySelectorAll('a[data-target]').forEach(a => {
 });
 showPage('home');
 
-// Verse of the Day — pulls today's KJV verse from a free, no-key, CORS-enabled
-// Bible API (judeasoftware.com). Falls back to a plain message if it can't load.
 // Contact and Work-With-Us forms — no backend on a static site, so submitting
 // builds a pre-filled mailto: link (addressed to info@theverse.fm) and opens
 // the visitor's own email app instead of sending anything from here.
@@ -1324,7 +1322,7 @@ function loadVerseOfTheDay(){
     .then(res => { if(!res.ok) throw new Error('votd.json not available'); return res.json(); })
     .then(data => {
       textEl.textContent = '"' + data.text + '"';
-      refEl.textContent = data.ref + ' (KJV)';
+      refEl.textContent = data.ref + ' (BSB)';
       dateEl.textContent = data.date;
     })
     .catch(showLocalFallback);
