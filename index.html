@@ -881,7 +881,7 @@ footer{background:var(--ink); color:rgba(247,240,230,0.7); padding:70px 0 40px;}
         <div class="hover-art" id="hoverArt">Album Art</div>
         <div class="hover-track" id="hoverTrack">Track title coming through</div>
         <div class="hover-artist" id="hoverArtist">The Verse FM — Live Broadcast</div>
-        <div class="hover-album" id="hoverAlbum">Album — Verse Sessions Vol. 1</div>
+        <div class="hover-album" id="hoverAlbum" style="display:none;"></div>
       </div>
     </div>
   </div>
@@ -1354,21 +1354,34 @@ playBtn.addEventListener('click', () => {
   const hoverAlbum = document.getElementById('hoverAlbum');
   if(!nowTrack) return;
 
+  // radio.co only gives one combined "title" string (typically formatted
+  // "Artist - Song") plus artwork — no separate artist or album fields.
+  // Split on the first hyphen so song title and artist can be shown as
+  // two distinct pieces, song first.
+  function splitTitle(raw){
+    const parts = raw.split(/\s-\s/);
+    if(parts.length >= 2){
+      return { song: parts.slice(1).join(' - ').trim(), artist: parts[0].trim() };
+    }
+    return { song: raw.trim(), artist: 'The Verse FM' };
+  }
+
   async function refresh(){
     try{
       const res = await fetch('https://public.radio.co/stations/s052a4bca4/status');
       if(!res.ok) throw new Error('now-playing request failed');
       const data = await res.json();
       const track = data.current_track || {};
-      const title = track.title || 'The Verse FM';
+      const raw = track.title || 'The Verse FM';
+      const { song, artist } = splitTitle(raw);
       const artwork = track.artwork_url_large || track.artwork_url || data.logo_url;
 
-      if(trackLabel) trackLabel.textContent = 'Live · ' + title;
-      if(nowTrack) nowTrack.textContent = title;
-      if(nowArtist) nowArtist.textContent = 'The Verse FM — Live Broadcast';
-      if(hoverTrack) hoverTrack.textContent = title;
-      if(hoverArtist) hoverArtist.textContent = 'The Verse FM — Live Broadcast';
-      if(hoverAlbum) hoverAlbum.textContent = 'The Verse FM';
+      if(trackLabel) trackLabel.textContent = 'Live · ' + song;
+      if(nowTrack) nowTrack.textContent = song;
+      if(nowArtist) nowArtist.textContent = artist;
+      if(hoverTrack) hoverTrack.textContent = song;
+      if(hoverArtist) hoverArtist.textContent = artist;
+      if(hoverAlbum) hoverAlbum.style.display = 'none';
 
       if(artwork){
         [albumArt, vinylArt, hoverArt].forEach(el => {
