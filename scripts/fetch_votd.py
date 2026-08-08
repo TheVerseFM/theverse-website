@@ -21,12 +21,14 @@ if not APP_KEY:
 
 HEADERS = {"X-YVP-App-Key": APP_KEY}
 
-# The King James Version's Bible ID on the YouVersion Platform. Confirmed
-# directly via the Bible directory at platform.youversion.com/bibles
-# (publisher: public domain / "Unknown" -- not gated behind any of the
-# publisher license agreements), so this can be used directly without
-# needing a separate lookup call.
-KJV_BIBLE_ID = 1
+# The Berean Standard Bible's Bible ID on the YouVersion Platform. KJV
+# (Bible ID 1) turned out not to be included in any of the fast-track
+# license bundles available on the Platform, including the "Public
+# Domain and Creative Commons" set -- so requests to it return a 403
+# regardless of app/licensing status. BSB is public domain, modern, and
+# is the version YouVersion uses in all of their own official API
+# examples, confirming it's genuinely accessible.
+BSB_BIBLE_ID = 3034
 
 
 def api_get(url):
@@ -49,7 +51,7 @@ def main():
     passage_id = votd["passage_id"]
 
     passage = api_get(
-        f"https://api.youversion.com/v1/bibles/{KJV_BIBLE_ID}/passages/{passage_id}?format=text"
+        f"https://api.youversion.com/v1/bibles/{BSB_BIBLE_ID}/passages/{passage_id}?format=text"
     )
 
     result = {
