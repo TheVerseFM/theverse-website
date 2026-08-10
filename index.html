@@ -170,6 +170,13 @@ a{color:inherit; text-decoration:none;}
 .btn-primary{background:var(--verse-red); color:var(--bg-cream); box-shadow:0 8px 20px rgba(168,53,42,0.25);}
 .btn-ghost{border:1px solid var(--ink); color:var(--ink);}
 .btn-ghost-dark{border:1px solid rgba(247,240,230,0.4); color:var(--bg-cream); background:none;}
+.listen-play-btn{
+  display:inline-flex; align-items:center; gap:10px;
+  padding:14px 30px; border-radius:100px; border:none; cursor:pointer;
+  background:var(--gold); color:var(--ink); font-family:inherit; font-size:0.92rem; font-weight:600;
+  letter-spacing:0.02em; box-shadow:0 8px 20px rgba(232,172,62,0.3); transition:transform 0.2s ease;
+}
+.listen-play-btn:hover{transform:translateY(-2px);}
 
 .ticker-wrap{
   position:relative; z-index:3;
@@ -670,8 +677,7 @@ footer{background:var(--ink); color:rgba(247,240,230,0.7); padding:70px 0 40px;}
     <h1 class="hero-title">A world within its own — bringing you love, life, and new music.</h1>
     <p class="hero-sub">A creative platform, community, and cultural movement built on radio, live experiences, and artist discovery — grounded in faith and the belief that the work done in private becomes the harvest seen in public.</p>
     <div class="hero-ctas">
-      <a href="#player" class="btn btn-primary">Tune In Live</a>
-      <a href="#chain" class="btn btn-ghost">Explore</a>
+      <a href="#listen" class="btn btn-primary" data-target="listen">Tune In Live</a>
     </div>
   </div>
 </header>
@@ -1054,7 +1060,10 @@ footer{background:var(--ink); color:rgba(247,240,230,0.7); padding:70px 0 40px;}
     <div class="now-track" id="nowTrack">Track title coming through</div>
     <div class="now-artist" id="nowArtist">The Verse FM — Live Broadcast</div>
     <div class="hero-ctas">
-      <button type="button" class="btn btn-primary" id="openFullPlayerBtn">Full Player</button>
+      <button type="button" class="listen-play-btn" id="listenPlayBtn" aria-label="Play or pause">
+        <svg id="listenPlayIcon" viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+        <span id="listenPlayLabel">Play</span>
+      </button>
       <button type="button" class="btn btn-ghost btn-ghost-dark" id="shareStationBtn">Share This Station</button>
     </div>
   </div>
@@ -1545,6 +1554,9 @@ const playIcon = document.getElementById('playIcon');
 const audio = document.getElementById('stream');
 const fullPlayerPlayBtn = document.getElementById('fullPlayerPlayBtn');
 const fullPlayerPlayIcon = document.getElementById('fullPlayerPlayIcon');
+const listenPlayBtn = document.getElementById('listenPlayBtn');
+const listenPlayIcon = document.getElementById('listenPlayIcon');
+const listenPlayLabel = document.getElementById('listenPlayLabel');
 let playing = false;
 const PAUSE_ICON = '<path d="M6 5h4v14H6zM14 5h4v14h-4z"/>';
 const PLAY_ICON = '<path d="M8 5v14l11-7z"/>';
@@ -1553,10 +1565,13 @@ function togglePlayback(){
   const iconHtml = playing ? PAUSE_ICON : PLAY_ICON;
   playIcon.innerHTML = iconHtml;
   if(fullPlayerPlayIcon) fullPlayerPlayIcon.innerHTML = iconHtml;
+  if(listenPlayIcon) listenPlayIcon.innerHTML = iconHtml;
+  if(listenPlayLabel) listenPlayLabel.textContent = playing ? 'Pause' : 'Play';
   if(audio.src){ playing ? audio.play() : audio.pause(); }
 }
 playBtn.addEventListener('click', togglePlayback);
 if(fullPlayerPlayBtn) fullPlayerPlayBtn.addEventListener('click', togglePlayback);
+if(listenPlayBtn) listenPlayBtn.addEventListener('click', togglePlayback);
 
 // Full-screen player overlay — opens from the "Full Player" buttons on the
 // Listen Live page and in the fixed bottom bar, closes via the X or Escape.
