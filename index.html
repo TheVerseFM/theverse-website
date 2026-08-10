@@ -170,14 +170,7 @@ a{color:inherit; text-decoration:none;}
 .btn-primary{background:var(--verse-red); color:var(--bg-cream); box-shadow:0 8px 20px rgba(168,53,42,0.25);}
 .btn-ghost{border:1px solid var(--ink); color:var(--ink);}
 .btn-ghost-dark{border:1px solid rgba(247,240,230,0.4); color:var(--bg-cream); background:none;}
-.listen-play-btn{
-  display:inline-flex; align-items:center; gap:10px;
-  padding:14px 30px; border-radius:100px; border:none; cursor:pointer;
-  background:var(--gold); color:var(--ink); font-family:inherit; font-size:0.92rem; font-weight:600;
-  letter-spacing:0.02em; box-shadow:0 8px 20px rgba(232,172,62,0.3); transition:transform 0.2s ease;
-}
-.listen-play-btn:hover{transform:translateY(-2px);}
-
+.btn-ghost-dark:hover{border-color:var(--gold); color:var(--gold);}
 .ticker-wrap{
   position:relative; z-index:3;
   border-top:1px solid var(--line); border-bottom:1px solid var(--line);
@@ -540,6 +533,7 @@ footer{background:var(--ink); color:rgba(247,240,230,0.7); padding:70px 0 40px;}
 .foot-cols{display:flex; gap:70px; flex-wrap:wrap;}
 .foot-col-title{font-family:'Space Mono', monospace; font-size:0.72rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--gold-soft); margin-bottom:16px;}
 .foot-col a{display:block; font-size:0.9rem; margin-bottom:10px; opacity:0.8;}
+.foot-static{display:block; font-size:0.9rem; margin-bottom:10px; opacity:0.55; cursor:default;}
 .foot-bottom{padding-top:28px; font-size:0.78rem; opacity:0.55; display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px;}
 
 /* ---------- PLAYER BAR ---------- */
@@ -1060,10 +1054,7 @@ footer{background:var(--ink); color:rgba(247,240,230,0.7); padding:70px 0 40px;}
     <div class="now-track" id="nowTrack">Track title coming through</div>
     <div class="now-artist" id="nowArtist">The Verse FM — Live Broadcast</div>
     <div class="hero-ctas">
-      <button type="button" class="listen-play-btn" id="listenPlayBtn" aria-label="Play or pause">
-        <svg id="listenPlayIcon" viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-        <span id="listenPlayLabel">Play</span>
-      </button>
+      <a href="#discovery" class="btn btn-ghost btn-ghost-dark" data-target="discovery">Suggest a Song</a>
       <button type="button" class="btn btn-ghost btn-ghost-dark" id="shareStationBtn">Share This Station</button>
     </div>
   </div>
@@ -1173,8 +1164,8 @@ footer{background:var(--ink); color:rgba(247,240,230,0.7); padding:70px 0 40px;}
         </div>
         <div class="foot-col">
           <div class="foot-col-title">Verse Entertainment</div>
-          <a href="#">Artist Development</a>
-          <a href="#">Song Administration</a>
+          <span class="foot-static">Artist Development</span>
+          <span class="foot-static">Song Administration</span>
           <a href="#apply" data-target="apply">Work With Us</a>
         </div>
         <div class="foot-col">
@@ -1554,9 +1545,6 @@ const playIcon = document.getElementById('playIcon');
 const audio = document.getElementById('stream');
 const fullPlayerPlayBtn = document.getElementById('fullPlayerPlayBtn');
 const fullPlayerPlayIcon = document.getElementById('fullPlayerPlayIcon');
-const listenPlayBtn = document.getElementById('listenPlayBtn');
-const listenPlayIcon = document.getElementById('listenPlayIcon');
-const listenPlayLabel = document.getElementById('listenPlayLabel');
 let playing = false;
 const PAUSE_ICON = '<path d="M6 5h4v14H6zM14 5h4v14h-4z"/>';
 const PLAY_ICON = '<path d="M8 5v14l11-7z"/>';
@@ -1565,13 +1553,10 @@ function togglePlayback(){
   const iconHtml = playing ? PAUSE_ICON : PLAY_ICON;
   playIcon.innerHTML = iconHtml;
   if(fullPlayerPlayIcon) fullPlayerPlayIcon.innerHTML = iconHtml;
-  if(listenPlayIcon) listenPlayIcon.innerHTML = iconHtml;
-  if(listenPlayLabel) listenPlayLabel.textContent = playing ? 'Pause' : 'Play';
   if(audio.src){ playing ? audio.play() : audio.pause(); }
 }
 playBtn.addEventListener('click', togglePlayback);
 if(fullPlayerPlayBtn) fullPlayerPlayBtn.addEventListener('click', togglePlayback);
-if(listenPlayBtn) listenPlayBtn.addEventListener('click', togglePlayback);
 
 // Full-screen player overlay — opens from the "Full Player" buttons on the
 // Listen Live page and in the fixed bottom bar, closes via the X or Escape.
