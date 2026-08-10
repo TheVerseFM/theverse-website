@@ -44,9 +44,28 @@ a{color:inherit; text-decoration:none;}
   backdrop-filter:blur(10px);
   border-bottom:1px solid var(--line);
 }
-.nav .wrap{display:flex; align-items:center; justify-content:space-between; height:76px;}
+.nav .wrap{display:flex; align-items:center; gap:22px; height:76px;}
+.nav-cta{margin-left:auto;}
 .wordmark{font-family:'Fraunces', serif; font-weight:600; font-size:1.5rem; letter-spacing:0.02em; color:var(--verse-red);}
 .nav-links{display:flex; align-items:center; gap:36px; font-size:0.92rem; letter-spacing:0.03em;}
+.nav-toggle{
+  display:none; flex-direction:column; justify-content:center; gap:5px;
+  width:34px; height:34px; padding:0; border:none; background:none; cursor:pointer; flex-shrink:0;
+}
+.nav-toggle span{width:22px; height:2px; background:var(--ink); border-radius:2px; transition:transform 0.2s ease, opacity 0.2s ease;}
+.nav-toggle.open span:nth-child(1){transform:translateY(7px) rotate(45deg);}
+.nav-toggle.open span:nth-child(2){opacity:0;}
+.nav-toggle.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
+.nav-mobile-menu{
+  display:none; flex-direction:column; gap:2px;
+  background:var(--bg-cream); border-top:1px solid var(--line); border-bottom:1px solid var(--line);
+  padding:8px 32px 16px;
+}
+.nav-mobile-menu.open{display:flex;}
+.nav-mobile-menu a{
+  padding:14px 0; font-size:1rem; border-bottom:1px solid var(--line); color:var(--ink);
+}
+.nav-mobile-menu a:last-child{border-bottom:none; color:var(--verse-red); font-weight:600;}
 .nav-links a{opacity:0.75; transition:opacity 0.2s;}
 .nav-links a:hover{opacity:1;}
 .nav-cta{
@@ -60,7 +79,7 @@ a{color:inherit; text-decoration:none;}
 
 /* ---------- MEDIA CAROUSEL ---------- */
 .hero-gradient-wrap{
-  background:linear-gradient(180deg, #EFD9D0 0%, #E7E2CE 22%, #DCE7DD 45%, var(--bg-cream) 100%);
+  background:linear-gradient(180deg, #B9A0C2 0%, #E5C3D8 26%, #F0D8E4 45%, #D2E1F1 68%, var(--bg-cream) 100%);
 }
 .media-carousel{background:transparent; padding:56px 0 10px; overflow:hidden;}
 .media-track{display:flex; align-items:center; gap:14px; width:max-content; animation:carousel-scroll 75s linear infinite;}
@@ -483,6 +502,7 @@ footer{background:var(--ink); color:rgba(247,240,230,0.7); padding:70px 0 40px;}
   .vinyl-wrap{display:none;}
   .panels{grid-template-columns:1fr;}
   .nav-links{display:none;}
+  .nav-toggle{display:flex;}
   .foot-top{flex-direction:column;}
   .chain-arrow{display:none;}
   .station-track{display:none;}
@@ -496,6 +516,9 @@ footer{background:var(--ink); color:rgba(247,240,230,0.7); padding:70px 0 40px;}
 
 <nav class="nav">
   <div class="wrap">
+    <button class="nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
     <a href="#" class="wordmark" data-target="home">The Verse</a>
     <div class="nav-links">
       <a href="#about" data-target="about">About</a>
@@ -504,6 +527,13 @@ footer{background:var(--ink); color:rgba(247,240,230,0.7); padding:70px 0 40px;}
       <a href="#psa" data-target="psa">PSA</a>
     </div>
     <a href="#listen" class="nav-cta" data-target="listen"><span class="live-dot"></span> Listen Live</a>
+  </div>
+  <div class="nav-mobile-menu" id="navMobileMenu">
+    <a href="#about" data-target="about">About</a>
+    <a href="#votd" data-target="votd">Verse of the Day</a>
+    <a href="#schedule" data-target="schedule">Schedule</a>
+    <a href="#psa" data-target="psa">PSA</a>
+    <a href="#listen" data-target="listen">Listen Live</a>
   </div>
 </nav>
 
@@ -1143,6 +1173,25 @@ document.querySelectorAll('a[data-target]').forEach(a => {
   });
 });
 showPage('home');
+
+// Mobile nav menu — toggles the dropdown open/closed, and closes it
+// automatically once a link inside is tapped.
+(function initMobileNav(){
+  const toggle = document.getElementById('navToggle');
+  const menu = document.getElementById('navMobileMenu');
+  if(!toggle || !menu) return;
+  function closeMenu(){
+    menu.classList.remove('open');
+    toggle.classList.remove('open');
+    toggle.setAttribute('aria-expanded', 'false');
+  }
+  toggle.addEventListener('click', () => {
+    const isOpen = menu.classList.toggle('open');
+    toggle.classList.toggle('open', isOpen);
+    toggle.setAttribute('aria-expanded', String(isOpen));
+  });
+  menu.querySelectorAll('a').forEach(a => a.addEventListener('click', closeMenu));
+})();
 
 // Media carousel: 22 video elements would try to autoplay at once if all
 // given a real src up front, which stalls every one of them. Instead each
