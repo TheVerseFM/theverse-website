@@ -164,11 +164,12 @@ a{color:inherit; text-decoration:none;}
 .btn{
   padding:14px 30px; border-radius:100px; font-size:0.92rem; letter-spacing:0.02em; font-weight:500;
   transition:transform 0.2s ease, box-shadow 0.2s ease;
-  display:inline-block;
+  display:inline-block; border:none; cursor:pointer; font-family:inherit; appearance:none;
 }
 .btn:hover{transform:translateY(-2px);}
 .btn-primary{background:var(--verse-red); color:var(--bg-cream); box-shadow:0 8px 20px rgba(168,53,42,0.25);}
 .btn-ghost{border:1px solid var(--ink); color:var(--ink);}
+.btn-ghost-dark{border:1px solid rgba(247,240,230,0.4); color:var(--bg-cream); background:none;}
 
 .ticker-wrap{
   position:relative; z-index:3;
@@ -338,6 +339,39 @@ a{color:inherit; text-decoration:none;}
 }
 
 /* ---------- LISTEN LIVE ---------- */
+/* ---------- FULL-SCREEN PLAYER ---------- */
+.full-player-overlay{
+  position:fixed; inset:0; z-index:200; background:var(--ink); color:var(--bg-cream);
+  display:flex; align-items:center; justify-content:center; flex-direction:column;
+  opacity:0; visibility:hidden; pointer-events:none; transition:opacity 0.3s ease, visibility 0.3s;
+  overflow:hidden; padding:24px;
+}
+.full-player-overlay.open{opacity:1; visibility:visible; pointer-events:auto;}
+.full-player-close{
+  position:absolute; top:24px; right:24px; z-index:3;
+  width:44px; height:44px; border-radius:50%; background:rgba(247,240,230,0.08); border:none;
+  color:var(--bg-cream); font-size:1.2rem; cursor:pointer; display:flex; align-items:center; justify-content:center;
+}
+.full-player-art{
+  width:min(70vw,320px); height:min(70vw,320px); border-radius:20px; overflow:hidden;
+  background:linear-gradient(160deg, #7A4E68 0%, #2E1D28 100%); background-size:cover; background-position:center;
+  box-shadow:0 0 0 1px rgba(247,240,230,0.18), 0 30px 70px rgba(0,0,0,0.5), 0 0 60px rgba(145,96,129,0.45);
+  display:flex; align-items:center; justify-content:center; font-family:'Fraunces', serif; font-style:italic;
+  color:rgba(247,240,230,0.4); margin-bottom:32px; position:relative; z-index:2;
+}
+.full-player-track{font-family:'Fraunces', serif; font-style:italic; font-size:1.8rem; margin-bottom:8px; position:relative; z-index:2; text-align:center; padding:0 24px;}
+.full-player-artist{font-size:1rem; color:rgba(247,240,230,0.65); margin-bottom:36px; position:relative; z-index:2;}
+.full-player-controls{display:flex; align-items:center; gap:24px; position:relative; z-index:2;}
+.full-player-playbtn{
+  width:64px; height:64px; border-radius:50%; background:var(--gold); color:var(--ink); border:none; cursor:pointer;
+  display:flex; align-items:center; justify-content:center; transition:transform 0.15s ease;
+}
+.full-player-playbtn:hover{transform:scale(1.06);}
+.full-player-onair{
+  font-family:'Space Mono', monospace; font-size:0.75rem; letter-spacing:0.1em; color:var(--gold);
+  margin-top:28px; display:flex; align-items:center; gap:8px; position:relative; z-index:2;
+}
+
 .listen{padding:150px 0; background:var(--ink); color:var(--bg-cream); position:relative; overflow:hidden;}
 
 /* Slow-drifting purple glow, lava-lamp style — sits behind the vinyl and
@@ -1020,7 +1054,8 @@ footer{background:var(--ink); color:rgba(247,240,230,0.7); padding:70px 0 40px;}
     <div class="now-track" id="nowTrack">Track title coming through</div>
     <div class="now-artist" id="nowArtist">The Verse FM — Live Broadcast</div>
     <div class="hero-ctas">
-      <a href="#listen" class="btn btn-primary" data-target="listen">Open Full Player</a>
+      <button type="button" class="btn btn-primary" id="openFullPlayerBtn">Full Player</button>
+      <button type="button" class="btn btn-ghost btn-ghost-dark" id="shareStationBtn">Share This Station</button>
     </div>
   </div>
 </section>
@@ -1197,6 +1232,10 @@ function showPage(pageName){
   document.querySelectorAll('.page-section').forEach(el => {
     el.classList.toggle('active', el.dataset.page === pageName);
   });
+  // The bottom bar's own "Full Player" link is redundant once you're
+  // already on the Listen Live page — hide it there specifically.
+  const bottomBarLink = document.querySelector('.player-cta');
+  if(bottomBarLink) bottomBarLink.style.display = (pageName === 'listen') ? 'none' : '';
 }
 document.querySelectorAll('a[data-target]').forEach(a => {
   a.addEventListener('click', e => {
@@ -1504,14 +1543,69 @@ loadVerseOfTheDay();
 const playBtn = document.getElementById('playBtn');
 const playIcon = document.getElementById('playIcon');
 const audio = document.getElementById('stream');
+const fullPlayerPlayBtn = document.getElementById('fullPlayerPlayBtn');
+const fullPlayerPlayIcon = document.getElementById('fullPlayerPlayIcon');
 let playing = false;
-playBtn.addEventListener('click', () => {
+const PAUSE_ICON = '<path d="M6 5h4v14H6zM14 5h4v14h-4z"/>';
+const PLAY_ICON = '<path d="M8 5v14l11-7z"/>';
+function togglePlayback(){
   playing = !playing;
-  playIcon.innerHTML = playing
-    ? '<path d="M6 5h4v14H6zM14 5h4v14h-4z"/>'
-    : '<path d="M8 5v14l11-7z"/>';
+  const iconHtml = playing ? PAUSE_ICON : PLAY_ICON;
+  playIcon.innerHTML = iconHtml;
+  if(fullPlayerPlayIcon) fullPlayerPlayIcon.innerHTML = iconHtml;
   if(audio.src){ playing ? audio.play() : audio.pause(); }
-});
+}
+playBtn.addEventListener('click', togglePlayback);
+if(fullPlayerPlayBtn) fullPlayerPlayBtn.addEventListener('click', togglePlayback);
+
+// Full-screen player overlay — opens from the "Full Player" buttons on the
+// Listen Live page and in the fixed bottom bar, closes via the X or Escape.
+(function initFullPlayerOverlay(){
+  const overlay = document.getElementById('fullPlayerOverlay');
+  const openBtn = document.getElementById('openFullPlayerBtn');
+  const closeBtn = document.getElementById('closeFullPlayerBtn');
+  const bottomBarLink = document.querySelector('.player-cta');
+  if(!overlay) return;
+
+  function openOverlay(){
+    overlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeOverlay(){
+    overlay.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  if(openBtn) openBtn.addEventListener('click', openOverlay);
+  if(bottomBarLink){
+    bottomBarLink.addEventListener('click', (e) => { e.preventDefault(); openOverlay(); });
+  }
+  if(closeBtn) closeBtn.addEventListener('click', closeOverlay);
+  document.addEventListener('keydown', (e) => { if(e.key === 'Escape') closeOverlay(); });
+})();
+
+// Share This Station — native share sheet where available, otherwise
+// copies the link and gives brief on-button confirmation.
+(function initShareStation(){
+  const shareBtn = document.getElementById('shareStationBtn');
+  if(!shareBtn) return;
+  shareBtn.addEventListener('click', async () => {
+    const shareData = {
+      title: 'The Verse FM — Live Broadcast',
+      text: 'Tune in to The Verse FM, live now.',
+      url: 'https://theverse.fm/#listen'
+    };
+    if(navigator.share){
+      try{ await navigator.share(shareData); }catch(err){ /* user cancelled */ }
+    } else {
+      try{
+        await navigator.clipboard.writeText(shareData.url);
+        const original = shareBtn.textContent;
+        shareBtn.textContent = 'Link Copied!';
+        setTimeout(() => { shareBtn.textContent = original; }, 2000);
+      }catch(err){ /* clipboard unavailable */ }
+    }
+  });
+})();
 
 // Live now-playing data from radio.co's public API — no key required.
 // Polls every 20s so track/artist/artwork stay current across the site.
@@ -1525,6 +1619,9 @@ playBtn.addEventListener('click', () => {
   const hoverTrack = document.getElementById('hoverTrack');
   const hoverArtist = document.getElementById('hoverArtist');
   const hoverAlbum = document.getElementById('hoverAlbum');
+  const fullPlayerArt = document.getElementById('fullPlayerArt');
+  const fullPlayerTrack = document.getElementById('fullPlayerTrack');
+  const fullPlayerArtist = document.getElementById('fullPlayerArtist');
   if(!nowTrack) return;
 
   // radio.co only gives one combined "title" string (typically formatted
@@ -1555,9 +1652,11 @@ playBtn.addEventListener('click', () => {
       if(hoverTrack) hoverTrack.textContent = song;
       if(hoverArtist) hoverArtist.textContent = artist;
       if(hoverAlbum) hoverAlbum.style.display = 'none';
+      if(fullPlayerTrack) fullPlayerTrack.textContent = song;
+      if(fullPlayerArtist) fullPlayerArtist.textContent = artist;
 
       if(artwork){
-        [albumArt, vinylArt, hoverArt].forEach(el => {
+        [albumArt, vinylArt, hoverArt, fullPlayerArt].forEach(el => {
           if(el){ el.style.backgroundImage = 'url(' + artwork + ')'; el.textContent = ''; }
         });
       }
@@ -1570,6 +1669,24 @@ playBtn.addEventListener('click', () => {
 })();
 
 </script>
+
+<div class="full-player-overlay" id="fullPlayerOverlay">
+  <div class="listen-lava-bg">
+    <div class="lava-blob lava-b1"></div>
+    <div class="lava-blob lava-b2"></div>
+    <div class="lava-blob lava-b3"></div>
+  </div>
+  <button type="button" class="full-player-close" id="closeFullPlayerBtn" aria-label="Close full player">✕</button>
+  <div class="full-player-art" id="fullPlayerArt">Album Art</div>
+  <div class="full-player-track" id="fullPlayerTrack">Track title coming through</div>
+  <div class="full-player-artist" id="fullPlayerArtist">The Verse FM</div>
+  <div class="full-player-controls">
+    <button type="button" class="full-player-playbtn" id="fullPlayerPlayBtn" aria-label="Play or pause">
+      <svg id="fullPlayerPlayIcon" viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+    </button>
+  </div>
+  <div class="full-player-onair"><span class="live-dot"></span> ON AIR · THE VERSE FM</div>
+</div>
 
 </body>
 </html>
