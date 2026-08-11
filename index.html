@@ -114,48 +114,7 @@ a{color:inherit; text-decoration:none;}
   font-family:'Space Mono', monospace; font-size:0.78rem; letter-spacing:0.18em;
   color:var(--plum); text-transform:uppercase; margin-bottom:22px;
 }
-.signal-mid{
-  position:relative; width:140px; height:140px; flex-shrink:0;
-  --pulse-dur:2.6s;
-  animation:floaty 3.4s ease-in-out infinite; /* the whole unit drifts gently while its parts pulse in sync */
-}
-.mid-dot{
-  position:absolute; top:50%; left:50%;
-  width:9px; height:9px; border-radius:50%;
-  background:var(--gold); transform:translate(-50%,-50%);
-  box-shadow:0 0 14px 3px rgba(232,172,62,0.75);
-  animation:dotpulse var(--pulse-dur) ease-in-out infinite;
-}
-.mid-ring{
-  position:absolute; top:50%; left:50%;
-  border:1.5px solid rgba(232,172,62,0.55); border-radius:50%;
-  transform:translate(-50%,-50%);
-  animation:midringpulse var(--pulse-dur) ease-out infinite;
-}
-.mid-ray{
-  position:absolute; top:50%; left:50%;
-  width:2.5px; height:54px;
-  background:linear-gradient(180deg, var(--gold) 0%, rgba(232,172,62,0) 100%);
-  transform-origin:top center;
-  filter:drop-shadow(0 0 5px rgba(232,172,62,0.6));
-  animation:midraypulse var(--pulse-dur) ease-in-out infinite;
-}
-@keyframes floaty{
-  0%,100%{transform:translateY(0);}
-  50%{transform:translateY(-10px);}
-}
-@keyframes dotpulse{
-  0%,100%{transform:translate(-50%,-50%) scale(1); opacity:1;}
-  50%{transform:translate(-50%,-50%) scale(0.7); opacity:0.55;}
-}
-@keyframes midringpulse{
-  0%{width:16px; height:16px; opacity:0.75;}
-  100%{width:130px; height:130px; opacity:0;}
-}
-@keyframes midraypulse{
-  0%,100%{opacity:0.9; height:54px;}
-  50%{opacity:0.3; height:38px;}
-}
+.eyebrow-mark{width:68px; height:68px; flex-shrink:0;}
 .hero-title{
   font-family:'Fraunces', serif; font-weight:500; font-style:italic;
   font-size:clamp(2.4rem, 6vw, 4.6rem); line-height:1.05; letter-spacing:-0.01em;
@@ -669,7 +628,7 @@ footer{background:var(--ink); color:rgba(247,240,230,0.7); padding:70px 0 40px;}
   <div class="hero-content wrap">
     <div class="eyebrow">
       <span>The Verse FM</span>
-      <span class="signal-mid" id="signalMid"></span>
+      <img src="assets/logo/verse-logo-icon.svg" class="eyebrow-mark" alt="The Verse signal mark">
       <span>Broadcasting Now</span>
     </div>
     <h1 class="hero-title">A world within its own — bringing you love, life, and new music.</h1>
@@ -1208,26 +1167,6 @@ footer{background:var(--ink); color:rgba(247,240,230,0.7); padding:70px 0 40px;}
 <audio id="stream" preload="none" src="https://stream.radio.co/s052a4bca4/listen"></audio>
 
 <script>
-// Standalone signal between "The Verse FM" and "Broadcasting Now" — dot, ring, and
-// every ray share the same animation + start time (no per-ray delay), so it all
-// blinks and radiates as one synced beat rather than drifting independently.
-const signalMid = document.getElementById('signalMid');
-const rayCount = 10;
-for(let i=0;i<rayCount;i++){
-  const ray = document.createElement('div');
-  ray.className = 'mid-ray';
-  const angle = (360/rayCount)*i;
-  ray.style.transform = `translate(-50%,0%) rotate(${angle}deg)`;
-  signalMid.appendChild(ray);
-}
-const ring = document.createElement('div');
-ring.className = 'mid-ring';
-signalMid.appendChild(ring);
-
-const dot = document.createElement('div');
-dot.className = 'mid-dot';
-signalMid.appendChild(dot);
-
 // Tab system — About / Schedule / PSA are their own pages; the hero, ecosystem
 // (duality), founder-philosophy (chain), and scripture stay together as "home".
 // The footer and the live player sit outside this system, so they stay visible
