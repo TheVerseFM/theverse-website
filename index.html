@@ -51,6 +51,8 @@ a{color:inherit; text-decoration:none;}
 .nav .wrap{display:flex; align-items:center; gap:22px; height:76px;}
 .nav-cta{margin-left:auto;}
 .wordmark{font-family:'Fraunces', serif; font-weight:600; font-size:1.5rem; letter-spacing:0.02em; color:var(--verse-red);}
+.wordmark-group{display:flex; align-items:center; gap:8px; text-decoration:none;}
+.nav-mark{width:30px; height:30px; flex-shrink:0;}
 .nav-links{display:flex; align-items:center; gap:36px; font-size:0.92rem; letter-spacing:0.03em;}
 .nav-toggle{
   display:none; flex-direction:column; justify-content:center; gap:5px;
@@ -551,7 +553,10 @@ footer{background:var(--ink); color:rgba(247,240,230,0.7); padding:70px 0 40px;}
     <button class="nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false">
       <span></span><span></span><span></span>
     </button>
-    <a href="#" class="wordmark" data-target="home">The Verse</a>
+    <a href="#" class="wordmark-group" data-target="home">
+      <img src="assets/logo/verse-logo-icon.svg" class="nav-mark" alt="">
+      <span class="wordmark">The Verse</span>
+    </a>
     <div class="nav-links">
       <a href="#about" data-target="about">About</a>
       <a href="#votd" data-target="votd">Verse of the Day</a>
