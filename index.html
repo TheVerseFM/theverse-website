@@ -90,6 +90,8 @@ a{color:inherit; text-decoration:none;}
 .hero-gradient-wrap{
   background:linear-gradient(180deg, #B79BC4 0%, #CDBBE6 30%, #EFCADD 62%, var(--bg-cream) 100%);
 }
+.hero-video{width:100%; line-height:0; overflow:hidden; background:var(--ink);}
+.hero-video video{width:100%; height:60vh; min-height:340px; max-height:640px; object-fit:cover; display:block;}
 .media-carousel{background:transparent; padding:56px 0 10px; overflow:hidden;}
 .media-track{display:flex; align-items:center; gap:14px; width:max-content; animation:carousel-scroll 75s linear infinite;}
 .media-carousel:hover .media-track{animation-play-state:paused;}
@@ -588,50 +590,11 @@ footer{background:var(--ink); color:rgba(247,240,230,0.7); padding:70px 0 40px;}
   </div>
 </section>
 
-<div class="hero-gradient-wrap">
-<section class="media-carousel page-section active" data-page="home">
-  <div class="media-track">
-      <div class="media-tile"><img src="assets/carousel/photo-01.jpg" alt="The Verse — live moments" loading="lazy"></div>
-      <div class="media-tile"><video data-src="assets/carousel/video-01.mp4" muted loop playsinline preload="none"></video></div>
-      <div class="media-tile"><img src="assets/carousel/photo-02.jpg" alt="The Verse — live moments" loading="lazy"></div>
-      <div class="media-tile"><video data-src="assets/carousel/video-02.mp4" muted loop playsinline preload="none"></video></div>
-      <div class="media-tile"><img src="assets/carousel/photo-03.jpg" alt="The Verse — live moments" loading="lazy"></div>
-      <div class="media-tile"><video data-src="assets/carousel/video-03.mp4" muted loop playsinline preload="none"></video></div>
-      <div class="media-tile"><img src="assets/carousel/photo-04.jpg" alt="The Verse — live moments" loading="lazy"></div>
-      <div class="media-tile"><video data-src="assets/carousel/video-04.mp4" muted loop playsinline preload="none"></video></div>
-      <div class="media-tile"><img src="assets/carousel/photo-05.jpg" alt="The Verse — live moments" loading="lazy"></div>
-      <div class="media-tile"><video data-src="assets/carousel/video-05.mp4" muted loop playsinline preload="none"></video></div>
-      <div class="media-tile"><img src="assets/carousel/photo-06.jpg" alt="The Verse — live moments" loading="lazy"></div>
-      <div class="media-tile"><video data-src="assets/carousel/video-06.mp4" muted loop playsinline preload="none"></video></div>
-      <div class="media-tile"><img src="assets/carousel/photo-07.jpg" alt="The Verse — live moments" loading="lazy"></div>
-      <div class="media-tile"><video data-src="assets/carousel/video-07.mp4" muted loop playsinline preload="none"></video></div>
-      <div class="media-tile"><img src="assets/carousel/photo-08.jpg" alt="The Verse — live moments" loading="lazy"></div>
-      <div class="media-tile"><video data-src="assets/carousel/video-08.mp4" muted loop playsinline preload="none"></video></div>
-      <div class="media-tile"><video data-src="assets/carousel/video-09.mp4" muted loop playsinline preload="none"></video></div>
-      <div class="media-tile"><video data-src="assets/carousel/video-10.mp4" muted loop playsinline preload="none"></video></div>
-      <div class="media-tile"><video data-src="assets/carousel/video-11.mp4" muted loop playsinline preload="none"></video></div>
-      <div class="media-tile"><img src="assets/carousel/photo-01.jpg" alt="The Verse — live moments" loading="lazy"></div>
-      <div class="media-tile"><video data-src="assets/carousel/video-01.mp4" muted loop playsinline preload="none"></video></div>
-      <div class="media-tile"><img src="assets/carousel/photo-02.jpg" alt="The Verse — live moments" loading="lazy"></div>
-      <div class="media-tile"><video data-src="assets/carousel/video-02.mp4" muted loop playsinline preload="none"></video></div>
-      <div class="media-tile"><img src="assets/carousel/photo-03.jpg" alt="The Verse — live moments" loading="lazy"></div>
-      <div class="media-tile"><video data-src="assets/carousel/video-03.mp4" muted loop playsinline preload="none"></video></div>
-      <div class="media-tile"><img src="assets/carousel/photo-04.jpg" alt="The Verse — live moments" loading="lazy"></div>
-      <div class="media-tile"><video data-src="assets/carousel/video-04.mp4" muted loop playsinline preload="none"></video></div>
-      <div class="media-tile"><img src="assets/carousel/photo-05.jpg" alt="The Verse — live moments" loading="lazy"></div>
-      <div class="media-tile"><video data-src="assets/carousel/video-05.mp4" muted loop playsinline preload="none"></video></div>
-      <div class="media-tile"><img src="assets/carousel/photo-06.jpg" alt="The Verse — live moments" loading="lazy"></div>
-      <div class="media-tile"><video data-src="assets/carousel/video-06.mp4" muted loop playsinline preload="none"></video></div>
-      <div class="media-tile"><img src="assets/carousel/photo-07.jpg" alt="The Verse — live moments" loading="lazy"></div>
-      <div class="media-tile"><video data-src="assets/carousel/video-07.mp4" muted loop playsinline preload="none"></video></div>
-      <div class="media-tile"><img src="assets/carousel/photo-08.jpg" alt="The Verse — live moments" loading="lazy"></div>
-      <div class="media-tile"><video data-src="assets/carousel/video-08.mp4" muted loop playsinline preload="none"></video></div>
-      <div class="media-tile"><video data-src="assets/carousel/video-09.mp4" muted loop playsinline preload="none"></video></div>
-      <div class="media-tile"><video data-src="assets/carousel/video-10.mp4" muted loop playsinline preload="none"></video></div>
-      <div class="media-tile"><video data-src="assets/carousel/video-11.mp4" muted loop playsinline preload="none"></video></div>
-  </div>
+<section class="hero-video page-section active" data-page="home">
+  <video src="assets/carousel/video-06.mp4" autoplay muted loop playsinline></video>
 </section>
 
+<div class="hero-gradient-wrap">
 <header class="hero page-section active" data-page="home">
   <div class="hero-content wrap">
     <div class="eyebrow">
@@ -786,6 +749,49 @@ footer{background:var(--ink); color:rgba(247,240,230,0.7); padding:70px 0 40px;}
         <span class="tag">Artist-Centered</span>
       </div>
     </div>
+  </div>
+</section>
+
+<section class="media-carousel page-section active" data-page="home">
+  <div class="media-track">
+      <div class="media-tile"><img src="assets/carousel/photo-01.jpg" alt="The Verse — live moments" loading="lazy"></div>
+      <div class="media-tile"><video data-src="assets/carousel/video-01.mp4" muted loop playsinline preload="none"></video></div>
+      <div class="media-tile"><img src="assets/carousel/photo-02.jpg" alt="The Verse — live moments" loading="lazy"></div>
+      <div class="media-tile"><video data-src="assets/carousel/video-02.mp4" muted loop playsinline preload="none"></video></div>
+      <div class="media-tile"><img src="assets/carousel/photo-03.jpg" alt="The Verse — live moments" loading="lazy"></div>
+      <div class="media-tile"><video data-src="assets/carousel/video-03.mp4" muted loop playsinline preload="none"></video></div>
+      <div class="media-tile"><img src="assets/carousel/photo-04.jpg" alt="The Verse — live moments" loading="lazy"></div>
+      <div class="media-tile"><video data-src="assets/carousel/video-04.mp4" muted loop playsinline preload="none"></video></div>
+      <div class="media-tile"><img src="assets/carousel/photo-05.jpg" alt="The Verse — live moments" loading="lazy"></div>
+      <div class="media-tile"><video data-src="assets/carousel/video-05.mp4" muted loop playsinline preload="none"></video></div>
+      <div class="media-tile"><img src="assets/carousel/photo-06.jpg" alt="The Verse — live moments" loading="lazy"></div>
+      <div class="media-tile"><video data-src="assets/carousel/video-06.mp4" muted loop playsinline preload="none"></video></div>
+      <div class="media-tile"><img src="assets/carousel/photo-07.jpg" alt="The Verse — live moments" loading="lazy"></div>
+      <div class="media-tile"><video data-src="assets/carousel/video-07.mp4" muted loop playsinline preload="none"></video></div>
+      <div class="media-tile"><img src="assets/carousel/photo-08.jpg" alt="The Verse — live moments" loading="lazy"></div>
+      <div class="media-tile"><video data-src="assets/carousel/video-08.mp4" muted loop playsinline preload="none"></video></div>
+      <div class="media-tile"><video data-src="assets/carousel/video-09.mp4" muted loop playsinline preload="none"></video></div>
+      <div class="media-tile"><video data-src="assets/carousel/video-10.mp4" muted loop playsinline preload="none"></video></div>
+      <div class="media-tile"><video data-src="assets/carousel/video-11.mp4" muted loop playsinline preload="none"></video></div>
+      <div class="media-tile"><img src="assets/carousel/photo-01.jpg" alt="The Verse — live moments" loading="lazy"></div>
+      <div class="media-tile"><video data-src="assets/carousel/video-01.mp4" muted loop playsinline preload="none"></video></div>
+      <div class="media-tile"><img src="assets/carousel/photo-02.jpg" alt="The Verse — live moments" loading="lazy"></div>
+      <div class="media-tile"><video data-src="assets/carousel/video-02.mp4" muted loop playsinline preload="none"></video></div>
+      <div class="media-tile"><img src="assets/carousel/photo-03.jpg" alt="The Verse — live moments" loading="lazy"></div>
+      <div class="media-tile"><video data-src="assets/carousel/video-03.mp4" muted loop playsinline preload="none"></video></div>
+      <div class="media-tile"><img src="assets/carousel/photo-04.jpg" alt="The Verse — live moments" loading="lazy"></div>
+      <div class="media-tile"><video data-src="assets/carousel/video-04.mp4" muted loop playsinline preload="none"></video></div>
+      <div class="media-tile"><img src="assets/carousel/photo-05.jpg" alt="The Verse — live moments" loading="lazy"></div>
+      <div class="media-tile"><video data-src="assets/carousel/video-05.mp4" muted loop playsinline preload="none"></video></div>
+      <div class="media-tile"><img src="assets/carousel/photo-06.jpg" alt="The Verse — live moments" loading="lazy"></div>
+      <div class="media-tile"><video data-src="assets/carousel/video-06.mp4" muted loop playsinline preload="none"></video></div>
+      <div class="media-tile"><img src="assets/carousel/photo-07.jpg" alt="The Verse — live moments" loading="lazy"></div>
+      <div class="media-tile"><video data-src="assets/carousel/video-07.mp4" muted loop playsinline preload="none"></video></div>
+      <div class="media-tile"><img src="assets/carousel/photo-08.jpg" alt="The Verse — live moments" loading="lazy"></div>
+      <div class="media-tile"><video data-src="assets/carousel/video-08.mp4" muted loop playsinline preload="none"></video></div>
+      <div class="media-tile"><video data-src="assets/carousel/video-09.mp4" muted loop playsinline preload="none"></video></div>
+      <div class="media-tile"><video data-src="assets/carousel/video-10.mp4" muted loop playsinline preload="none"></video></div>
+      <div class="media-tile"><video data-src="assets/carousel/video-11.mp4" muted loop playsinline preload="none"></video></div>
   </div>
 </section>
 
