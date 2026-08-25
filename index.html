@@ -244,6 +244,8 @@ a{color:inherit; text-decoration:none;}
 
 /* ---------- SHARED SECTION HEADS ---------- */
 .duality-head{text-align:center; max-width:640px; margin:0 auto 70px; position:relative; z-index:1;}
+.wide-head{max-width:800px;}
+.wide-head .section-title{white-space:nowrap;}
 .section-label{
   font-family:'Space Mono', monospace; font-size:0.75rem; letter-spacing:0.16em;
   text-transform:uppercase; color:var(--sage); margin-bottom:16px;
@@ -266,7 +268,8 @@ a{color:inherit; text-decoration:none;}
 
 /* ---------- SIGNAL CHAIN ---------- */
 .chain{padding:50px 0 110px; background:var(--bg-paper);}
-.chain-row{display:flex; align-items:center; justify-content:center; gap:0; flex-wrap:wrap; margin-top:60px;}
+.chain .duality-head{margin-bottom:30px;}
+.chain-row{display:flex; align-items:center; justify-content:center; gap:0; flex-wrap:wrap; margin-top:20px;}
 .chain-step{text-align:center; width:220px; padding:0 20px;}
 .chain-icon{
   width:64px; height:64px; border-radius:50%; margin:0 auto 20px;
@@ -543,6 +546,7 @@ footer{background:var(--ink); color:rgba(247,240,230,0.7); padding:70px 0 40px;}
 }
 
 @media (max-width:820px){
+  .wide-head .section-title{white-space:normal;}
   .media-tile{width:150px; height:214px;}
   .service-grid{grid-template-columns:repeat(2,1fr);}
   .form-row{grid-template-columns:1fr;}
@@ -638,7 +642,7 @@ footer{background:var(--ink); color:rgba(247,240,230,0.7); padding:70px 0 40px;}
     <div class="panels">
       <div class="panel panel-verse">
         <div class="panel-title">The Verse</div>
-        <p class="panel-body">The culture, the community, the storytelling. Radio, live experiences, and artist discovery — the public-facing world where diverse voices connect through love, life, creativity, and sound.</p>
+        <p class="panel-body">A world shaped by music, stories, creativity, and connection. Discover new sounds, experience new perspectives, and explore where your dreams can take you; a nice, free, and safe space to be.</p>
         <a href="#verse" class="panel-link" data-target="verse">Enter The Verse →</a>
       </div>
       <div class="panel panel-ent">
@@ -873,7 +877,7 @@ footer{background:var(--ink); color:rgba(247,240,230,0.7); padding:70px 0 40px;}
 
 <section class="verse-page page-section" id="verse" data-page="verse">
   <div class="wrap">
-    <div class="duality-head">
+    <div class="duality-head wide-head">
       <div class="section-label">The Verse</div>
       <div class="section-title">Created with purpose. Built on faith.</div>
     </div>
@@ -895,7 +899,7 @@ footer{background:var(--ink); color:rgba(247,240,230,0.7); padding:70px 0 40px;}
 
 <section class="services page-section" id="services" data-page="services">
   <div class="wrap">
-    <div class="duality-head">
+    <div class="duality-head wide-head">
       <div class="section-label">Verse Entertainment</div>
       <div class="section-title">Building careers. Protecting creativity.</div>
     </div>
